@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bootstrap demo</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+
+    <script>
+      var selectedOption = 1;
+
+      const changeOption = (value) => {
+        selectedOption = value;
+      };
+
+      const submitForm = () => {
+        const message = document.getElementById(
+          "exampleFormControlTextarea1"
+        ).value;
+        if (selectedOption === 1) {
+          // Send the selectedOption and message to the server using a POST request
+          fetch("/Symmetric", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              encryption_method: selectedOption,
+              message: message,
+            }),
+          })
+            .then((response) => response.text())
+            .then((data) => {
+              // Handle the response from the server, e.g., display a success message.
+              console.log(data);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+
+        else{
+
+            // Send the selectedOption and message to the server using a POST request
+            fetch('/Asymmetric', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ encryption_method: selectedOption, message: message }),
+            })
+                .then(response => response.text())
+                .then(data => {
+                    // Handle the response from the server, e.g., display a success message.
+                    console.log(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                }); 
+        }
+      };
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <label class="form-label">Encryption Method:</label>
+      <select
+        class="form-select form-select mb-3"
+        name="encryption_method"
+        onchange="changeOption(this.value)"
+      >
+        <option value="1">Symmetric</option>
+        <option value="2">Asymmetric</option>
+      </select>
+      <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label"
+          >Message</label
+        >
+        <textarea
+          class="form-control"
+          id="exampleFormControlTextarea1"
+          rows="3"
+        ></textarea>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="submitForm()">
+        Submit
+      </button>
+    </div>
+    <p>{{ result }}</p>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
